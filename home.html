@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plotly.js 3D Graph</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r133/three.min.js"></script>
+
+</head>
+<body>
+ 
+  
+<div id="plotly-div"></div>
+
+<script>
+
+//var x1={{temperateur.lat}};
+
+function daat(x,y,z,dgr) {
+//var point1 = { x: 1.3, y: 35, z: 200 };
+var point1 = { x, y, z  };
+// Define the magnitude and angle of the vector
+var magnitude = 3;
+//var angle = 192.75; // in degrees
+var angle = dgr;
+// Convert the angle to radians
+var radians = angle * Math.PI / 180;
+
+// Calculate the x, y, and z coordinates of the second point of the vector
+var x2 = point1.x + magnitude * Math.cos(radians);
+var y2 = point1.y + magnitude * Math.sin(radians);
+var z2 = point1.z;
+
+// Create a trace for the vector
+var trace = {
+  x: [point1.x, x2],
+  y: [point1.y, y2],
+  z: [point1.z, z2],
+  mode: 'lines',
+  type: 'scatter3d',
+
+  line: {
+    color: 'blue',
+    width: 3
+  }
+};
+
+
+
+
+
+
+
+
+
+
+// Define the first point and the angle of the cone
+var x0 = x2, y0 = y2, z0 = z2;
+//var anglee =-102.75; // in degrees
+var anglee =(angle-90)*-1;
+
+// Calculate the coordinates of the tip of the cone
+var rad = anglee * Math.PI / 180;
+var x11 = x0 + Math.sin(rad);
+var y11 = y0 + Math.cos(rad);
+var z11 = z0;
+//var x11= x0 +1.1;
+//var y11= y0 + 2.0
+// Create the cone trace object
+var trace1 = {
+  type: 'cone',
+  //sizeref: 0.5,
+   sizeref: 0.07,
+  u: [x11 - x0],
+  v: [y11 - y0],
+  w: [z11 - z0],
+  x: [x0],
+  y: [y0],
+  z: [z0]
+};
+return ( [trace , trace1]);
+}
+
+
+
+
+// Set up the plot layout with a camera position
+
+var layout = {
+  scene: {
+    camera: {
+      eye: {
+        x: -0.76,
+        y: 1.8,
+        z: 0.92
+      }
+    }
+  }
+};
+
+
+
+layout = {
+    scene: {
+      xaxis: {
+        color: 'black', 
+        title: {
+          font: {size: 10}, 
+          text: 'x0'
+        }, 
+        tickfont: {size: 10}, 
+        gridcolor: '#f0f0f0', 
+        backgroundcolor: 'white'
+      }, 
+      yaxis: {
+        color: 'black', 
+        title: {
+          font: {size: 10}, 
+          text: 'x1'
+        }, 
+        tickfont: {size: 10}, 
+        gridcolor: '#f0f0f0', 
+        backgroundcolor: 'white'
+      }, 
+      zaxis: {
+        color: 'black', 
+        title: {
+          font: {size: 10}, 
+          text: 'x2'
+        }, 
+        tickfont: {size: 10}, 
+        gridcolor: '#f0f0f0', 
+        backgroundcolor: 'lightgrey'
+      }, 
+      camera: {
+        up: {
+          x: 0, 
+          y: 0, 
+          z: 1
+        }, 
+        eye: {
+          x: 1.5, 
+          y: -1.4, 
+          z: 0.5
+        }, 
+        center: {
+          x: 0, 
+          y: 0, 
+          z: -0.1
+        }
+      }, 
+      domain: {
+        x: [0.0, 1.0], 
+        y: [0.0, 1.0]
+      }
+    }, 
+    title: {text: 'UMAP'}, 
+    width: 1000, 
+    height: 500, 
+    legend: {
+      x: 0.5, 
+      y: 0, 
+      title: {text: 'label'}, 
+      xanchor: 'center', 
+      yanchor: 'top', 
+      orientation: 'h', 
+      tracegroupgap: 0
+    }, 
+    margin: {
+      b: 0, 
+      l: 0, 
+      r: 0, 
+      t: 0
+    }, 
+    template: {
+      data: {
+        bar: [
+          {
+            type: 'bar', 
+            marker: {
+              line: {
+                color: '#E5ECF6', 
+                width: 0.5
+              }, 
+              pattern: {
+                size: 10, 
+                fillmode: 'overlay', 
+                solidity: 0.2
+              }
+            }, 
+            error_x: {color: '#2a3f5f'}, 
+            error_y: {color: '#2a3f5f'}
+          }
+        ], 
+        pie: [
+          {
+            type: 'pie', 
+            automargin: true
+          }
+        ], 
+        table: [
+          {
+            type: 'table', 
+            cells: {
+              fill: {color: '#EBF0F8'}, 
+              line: {color: 'white'}
+            }, 
+            header: {
+              fill: {color: '#C8D4E3'}, 
+              line: {color: 'white'}
+            }
+          }
+        ], 
+        carpet: [
+          {
+            type: 'carpet', 
+            aaxis: {
+              gridcolor: 'white', 
+              linecolor: 'white', 
+              endlinecolor: '#2a3f5f', 
+              minorgridcolor: 'white', 
+              startlinecolor: '#2a3f5f'
+            }, 
+            baxis: {
+              gridcolor: 'white', 
+              linecolor: 'white', 
+              endlinecolor: '#2a3f5f', 
+              minorgridcolor: 'white', 
+              startlinecolor: '#2a3f5f'
+            }
+          }
+        ], 
+        mesh3d: [
+          {
+            type: 'mesh3d', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }
+          }
+        ], 
+        contour: [
+          {
+            type: 'contour', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }, 
+            colorscale: [['0.0', '#0d0887'], ['0.1111111111111111', '#46039f'], ['0.2222222222222222', '#7201a8'], ['0.3333333333333333', '#9c179e'], ['0.4444444444444444', '#bd3786'], ['0.5555555555555556', '#d8576b'], ['0.6666666666666666', '#ed7953'], ['0.7777777777777778', '#fb9f3a'], ['0.8888888888888888', '#fdca26'], ['1.0', '#f0f921']]
+          }
+        ], 
+        heatmap: [
+          {
+            type: 'heatmap', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }, 
+            colorscale: [['0.0', '#0d0887'], ['0.1111111111111111', '#46039f'], ['0.2222222222222222', '#7201a8'], ['0.3333333333333333', '#9c179e'], ['0.4444444444444444', '#bd3786'], ['0.5555555555555556', '#d8576b'], ['0.6666666666666666', '#ed7953'], ['0.7777777777777778', '#fb9f3a'], ['0.8888888888888888', '#fdca26'], ['1.0', '#f0f921']]
+          }
+        ], 
+        scatter: [
+          {
+            type: 'scatter', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        surface: [
+          {
+            type: 'surface', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }, 
+            colorscale: [['0.0', '#0d0887'], ['0.1111111111111111', '#46039f'], ['0.2222222222222222', '#7201a8'], ['0.3333333333333333', '#9c179e'], ['0.4444444444444444', '#bd3786'], ['0.5555555555555556', '#d8576b'], ['0.6666666666666666', '#ed7953'], ['0.7777777777777778', '#fb9f3a'], ['0.8888888888888888', '#fdca26'], ['1.0', '#f0f921']]
+          }
+        ], 
+        barpolar: [
+          {
+            type: 'barpolar', 
+            marker: {
+              line: {
+                color: '#E5ECF6', 
+                width: 0.5
+              }, 
+              pattern: {
+                size: 10, 
+                fillmode: 'overlay', 
+                solidity: 0.2
+              }
+            }
+          }
+        ], 
+        heatmapgl: [
+          {
+            type: 'heatmapgl', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }, 
+            colorscale: [['0.0', '#0d0887'], ['0.1111111111111111', '#46039f'], ['0.2222222222222222', '#7201a8'], ['0.3333333333333333', '#9c179e'], ['0.4444444444444444', '#bd3786'], ['0.5555555555555556', '#d8576b'], ['0.6666666666666666', '#ed7953'], ['0.7777777777777778', '#fb9f3a'], ['0.8888888888888888', '#fdca26'], ['1.0', '#f0f921']]
+          }
+        ], 
+        histogram: [
+          {
+            type: 'histogram', 
+            marker: {pattern: {
+                size: 10, 
+                fillmode: 'overlay', 
+                solidity: 0.2
+              }}
+          }
+        ], 
+        parcoords: [
+          {
+            line: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}, 
+            type: 'parcoords'
+          }
+        ], 
+        scatter3d: [
+          {
+            line: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}, 
+            type: 'scatter3d', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        scattergl: [
+          {
+            type: 'scattergl', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        choropleth: [
+          {
+            type: 'choropleth', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }
+          }
+        ], 
+        scattergeo: [
+          {
+            type: 'scattergeo', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        histogram2d: [
+          {
+            type: 'histogram2d', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }, 
+            colorscale: [['0.0', '#0d0887'], ['0.1111111111111111', '#46039f'], ['0.2222222222222222', '#7201a8'], ['0.3333333333333333', '#9c179e'], ['0.4444444444444444', '#bd3786'], ['0.5555555555555556', '#d8576b'], ['0.6666666666666666', '#ed7953'], ['0.7777777777777778', '#fb9f3a'], ['0.8888888888888888', '#fdca26'], ['1.0', '#f0f921']]
+          }
+        ], 
+        scatterpolar: [
+          {
+            type: 'scatterpolar', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        contourcarpet: [
+          {
+            type: 'contourcarpet', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }
+          }
+        ], 
+        scattercarpet: [
+          {
+            type: 'scattercarpet', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        scattermapbox: [
+          {
+            type: 'scattermapbox', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        scatterpolargl: [
+          {
+            type: 'scatterpolargl', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        scatterternary: [
+          {
+            type: 'scatterternary', 
+            marker: {colorbar: {
+                ticks: '', 
+                outlinewidth: 0
+              }}
+          }
+        ], 
+        histogram2dcontour: [
+          {
+            type: 'histogram2dcontour', 
+            colorbar: {
+              ticks: '', 
+              outlinewidth: 0
+            }, 
+            colorscale: [['0.0', '#0d0887'], ['0.1111111111111111', '#46039f'], ['0.2222222222222222', '#7201a8'], ['0.3333333333333333', '#9c179e'], ['0.4444444444444444', '#bd3786'], ['0.5555555555555556', '#d8576b'], ['0.6666666666666666', '#ed7953'], ['0.7777777777777778', '#fb9f3a'], ['0.8888888888888888', '#fdca26'], ['1.0', '#f0f921']]
+          }
+        ]
+      }, 
+      layout: {
+        geo: {
+          bgcolor: 'white', 
+          showland: true, 
+          lakecolor: 'white', 
+          landcolor: '#E5ECF6', 
+          showlakes: true, 
+          subunitcolor: 'white'
+        }, 
+        font: {color: '#2a3f5f'}, 
+        polar: {
+          bgcolor: '#E5ECF6', 
+          radialaxis: {
+            ticks: '', 
+            gridcolor: 'white', 
+            linecolor: 'white'
+          }, 
+          angularaxis: {
+            ticks: '', 
+            gridcolor: 'white', 
+            linecolor: 'white'
+          }
+        }, 
+        scene: {
+          xaxis: {
+            ticks: '', 
+            gridcolor: 'white', 
+            gridwidth: 2, 
+            linecolor: 'white', 
+            zerolinecolor: 'white', 
+            showbackground: true, 
+            backgroundcolor: '#E5ECF6'
+          }, 
+          yaxis: {
+            ticks: '', 
+            gridcolor: 'white', 
+            gridwidth: 2, 
+            linecolor: 'white', 
+            zerolinecolor: 'white', 
+            showbackground: true, 
+            backgroundcolor: '#E5ECF6'
+          }, 
+          zaxis: {
+            ticks: '', 
+            gridcolor: 'white', 
+            gridwidth: 2, 
+            linecolor: 'white', 
+            zerolinecolor: 'white', 
+            showbackground: true, 
+            backgroundcolor: '#E5ECF6'
+          }
+        }, 
+        title: {x: 0.05}, 
+        xaxis: {
+          ticks: '', 
+          title: {standoff: 15}, 
+          gridcolor: 'white', 
+          linecolor: 'white', 
+          automargin: true, 
+          zerolinecolor: 'white', 
+          zerolinewidth: 2
+        }, 
+        yaxis: {
+          ticks: '', 
+          title: {standoff: 15}, 
+          gridcolor: 'white', 
+          linecolor: 'white', 
+          automargin: true, 
+          zerolinecolor: 'white', 
+          zerolinewidth: 2
+        }, 
+        mapbox: {style: 'light'}, 
+        ternary: {
+          aaxis: {
+            ticks: '', 
+            gridcolor: 'white', 
+            linecolor: 'white'
+          }, 
+          baxis: {
+            ticks: '', 
+            gridcolor: 'white', 
+            linecolor: 'white'
+          }, 
+          caxis: {
+            ticks: '', 
+            gridcolor: 'white', 
+            linecolor: 'white'
+          }, 
+          bgcolor: '#E5ECF6'
+        }, 
+        colorway: ['#636efa', '#EF553B', '#00cc96', '#ab63fa', '#FFA15A', '#19d3f3', '#FF6692', '#B6E880', '#FF97FF', '#FECB52'], 
+        coloraxis: {colorbar: {
+            ticks: '', 
+            outlinewidth: 0
+          }}, 
+        hovermode: 'closest', 
+        colorscale: {
+          diverging: [['0', '#8e0152'], ['0.1', '#c51b7d'], ['0.2', '#de77ae'], ['0.3', '#f1b6da'], ['0.4', '#fde0ef'], ['0.5', '#f7f7f7'], ['0.6', '#e6f5d0'], ['0.7', '#b8e186'], ['0.8', '#7fbc41'], ['0.9', '#4d9221'], ['1', '#276419']], 
+          sequential: [['0.0', '#0d0887'], ['0.1111111111111111', '#46039f'], ['0.2222222222222222', '#7201a8'], ['0.3333333333333333', '#9c179e'], ['0.4444444444444444', '#bd3786'], ['0.5555555555555556', '#d8576b'], ['0.6666666666666666', '#ed7953'], ['0.7777777777777778', '#fb9f3a'], ['0.8888888888888888', '#fdca26'], ['1.0', '#f0f921']], 
+          sequentialminus: [['0.0', '#0d0887'], ['0.1111111111111111', '#46039f'], ['0.2222222222222222', '#7201a8'], ['0.3333333333333333', '#9c179e'], ['0.4444444444444444', '#bd3786'], ['0.5555555555555556', '#d8576b'], ['0.6666666666666666', '#ed7953'], ['0.7777777777777778', '#fb9f3a'], ['0.8888888888888888', '#fdca26'], ['1.0', '#f0f921']]
+        }, 
+        hoverlabel: {align: 'left'}, 
+        plot_bgcolor: '#E5ECF6', 
+        paper_bgcolor: 'white', 
+        shapedefaults: {line: {color: '#2a3f5f'}}, 
+        autotypenumbers: 'strict', 
+        annotationdefaults: {
+          arrowhead: 0, 
+          arrowcolor: '#2a3f5f', 
+          arrowwidth: 1
+        }
+      }
+    }, 
+    showlegend: false
+  };
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {% for temperateur in boards  %}
+//let data7 = daat('{{ temperateur.lat}}','{{ temperateur.lon}}','{{ temperateur.alt}}');
+//if (i % 50 === 0) {
+  // code to execute if i is even
+  if (({{ temperateur.lat}} === 3.4662) &&( {{ temperateur.alt }} > 36.8 ))  {
+Plotly.plot('plotly-div', {
+    data: daat('{{ temperateur.lat}}','{{ temperateur.alt}}','{{ temperateur.lon}}','{{ temperateur.direction}}'),
+    layout: layout
+  });
+}
+ 
+{%endfor%}
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
